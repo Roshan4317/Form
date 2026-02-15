@@ -1,6 +1,4 @@
-import expensesData from "../src/expensesData";
-
-export default function ExpensesTable() {
+export default function ExpensesTable({expenses}) {
   return (
     <table className="expense-table">
       <thead>
@@ -42,7 +40,7 @@ export default function ExpensesTable() {
         </tr>
       </thead>
       <tbody>
-        {expensesData.map(({ id, title, category, amount }) => (
+        {expenses.map(({ id, title, category, amount }) => (
           <tr key={id}>
             <td>{title}</td>
             <td>{category}</td>
