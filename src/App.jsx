@@ -12,7 +12,7 @@ function App() {
       <h1>Track Your Expenses.</h1>
       <div className="expense-tracker">
         <ExpenseForm setExpenses={setExpenses} />
-        <ExpensesTable expenses={expenses} />
+        <ExpensesTable expenses={expenses} setExpenses={setExpenses} />
       </div>
     </main>
   );

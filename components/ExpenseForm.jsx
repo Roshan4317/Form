@@ -11,10 +11,6 @@ export default function ExpenseForm({ setExpenses }) {
 
   const [errors, setErrors] = useState({});
 
-
-
-
-
   // const titleRef = useRef(null);
   // const categoryRef = useRef(null);
   // const amountRef = useRef(null);
