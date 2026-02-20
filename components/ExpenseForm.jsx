@@ -2,13 +2,13 @@ import { useRef, useState } from "react";
 import Input from "./Input";
 import Category from "./Category";
 
-export default function ExpenseForm({ setExpenses }) {
-  const [expense, setExpense] = useState({
-    title: "",
-    category: "",
-    amount: "",
-  });
-
+export default function ExpenseForm({
+  setExpenses,
+  setExpense,
+  expense,
+  isEditing,
+  setIsEditing,
+}) {
   const [errors, setErrors] = useState({});
 
   // const titleRef = useRef(null);
@@ -18,10 +18,13 @@ export default function ExpenseForm({ setExpenses }) {
   const validationConfig = {
     title: [
       { required: true, message: "Title is Required" },
-      { minLength: 5, message: "Title Should be 5 characters Long" },
+      { minLength: 2, message: "Title Should be 2 characters Long" },
     ],
     category: [{ required: true, message: "Please Select a Category" }],
-    amount: [{ required: true, message: "Please Enter an Amount" }],
+    amount: [
+      { required: true, message: "Please Enter an Amount" },
+      { pattern: /^[1-9]\d*(\.\d+)?$/, message: "Please Enter a valid number" },
+    ],
   };
 
   const validate = (formData) => {
@@ -32,7 +35,11 @@ export default function ExpenseForm({ setExpenses }) {
           errorData[key] = rule.message;
           return true;
         }
-        if (rule.minLength && value.length < 5) {
+        if (rule.minLength && value.length < rule.minLength) {
+          errorData[key] = rule.message;
+          return true;
+        }
+        if (rule.pattern && !rule.pattern.test(value)) {
           errorData[key] = rule.message;
           return true;
         }
@@ -58,6 +65,26 @@ export default function ExpenseForm({ setExpenses }) {
     const validateResult = validate(expense);
 
     if (Object.keys(validateResult).length) return;
+
+    if (isEditing) {
+      setExpenses((prevState) =>
+        prevState.map((prevExpense) => {
+          if (prevExpense.id === isEditing) {
+            return { ...expense, id: isEditing };
+          }
+          return prevExpense;
+        }),
+      );
+
+      setExpense({
+        title: "",
+        category: "",
+        amount: "",
+      });
+      setIsEditing("");
+      return;
+    }
+
     setExpenses((prevState) => [
       ...prevState,
       { ...expense, id: crypto.randomUUID() },
@@ -187,7 +214,7 @@ export default function ExpenseForm({ setExpenses }) {
         error={errors.amount}
       />
 
-      <button className="add-btn">Add</button>
+      <button className="add-btn">{isEditing ? "Save" : "Add"}</button>
     </form>
   );
 }
