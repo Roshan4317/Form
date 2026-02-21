@@ -14,7 +14,10 @@ export default function ExpensesTable({
   //   return expense.category.toLowerCase().includes(category);
   // });
 
-  const [filteredData, setQuery] = useFilter(expenses, (data) => data.category);
+  const [filteredData, setQuery, query] = useFilter(
+    expenses,
+    (data) => data.category,
+  );
 
   const [menuPosition, setMenuPosition] = useState({});
 
@@ -81,7 +84,7 @@ export default function ExpensesTable({
 
             <th>
               <select onChange={(e) => setQuery(e.target.value)}>
-                <option value="">All</option>
+                <option value="">{query ? query : "All"}</option>
                 <option value="grocery">Grocery</option>
                 <option value="clothes">Clothes</option>
                 <option value="bills">Bills</option>
